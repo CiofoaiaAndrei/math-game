@@ -2,8 +2,38 @@
 // VARIABILE GLOBALE
 // ============================================
 
-const CURRENT_VERSION = '1.0.0';
+const CURRENT_VERSION = '1.1.0';
 
+const UPDATE_CATEGORIES = {
+    major: {
+        emoji: '🚀',
+        color: '#667eea',
+        title: 'Update Major',
+        description: 'Funcționalități noi importante',
+        impact: 'Mare - Schimbări semnificative'
+    },
+    minor: {
+        emoji: '✨',
+        color: '#10b981',
+        title: 'Update Minor',
+        description: 'Îmbunătățiri și funcții noi',
+        impact: 'Mediu - Adăugiri utile'
+    },
+    patch: {
+        emoji: '🔧',
+        color: '#f59e0b',
+        title: 'Remediere',
+        description: 'Corecturi de erori',
+        impact: 'Mic - Bug fixes'
+    },
+    security: {
+        emoji: '🔒',
+        color: '#ef4444',
+        title: 'Securitate',
+        description: 'Patch-uri de securitate',
+        impact: 'Critic - Recomandat urgent'
+    }
+};
 
 let currentUser = null;
 let selectedTime = 10;
@@ -4048,7 +4078,7 @@ handleCorrectAnswer = function() {
 // AUTO-UPDATE SYSTEM - VERIFICARE VERSIUNI
 // ============================================
 
-const VERSION_CHECK_URL = 'https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/version.json';
+const VERSION_CHECK_URL = 'https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/develop/main/version.json';
 const UPDATE_CHECK_INTERVAL = 24 * 60 * 60 * 1000; // Verifică o dată pe zi
 
 // Verifică versiunea la pornire
@@ -4128,6 +4158,13 @@ function showUpdateNotification(versionData) {
                 <h3 style="margin-bottom: 10px;">📋 Ce este nou:</h3>
                 ${versionData.changes.map(change => `<p style="margin: 8px 0;">• ${change}</p>`).join('')}
             </div>
+            <p style="font-size: 0.9em; margin-top: 15px; opacity: 0.9;">
+                <a href="javascript:dismissUpdate(); showUpdatesHistory();" 
+                   style="color: white; text-decoration: underline; cursor: pointer;">
+                    📜 Vezi istoricul complet al update-urilor
+                </a>
+            </p>
+            
             <div style="display: flex; gap: 15px; margin-top: 30px;">
                 <button onclick="performUpdate('${versionData.updateUrl}')" style="
                     flex: 1;
@@ -4329,3 +4366,284 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 console.log('🚀 Sistem Auto-Update inițializat! Versiune curentă: ' + CURRENT_VERSION);
+
+// ============================================
+// SISTEM ISTORIC UPDATE-URI
+// ============================================
+
+const UPDATES_JSON_URL = 'https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/develop/main/updates.json';
+
+// Deschide pagina de update-uri
+function showUpdatesHistory() {
+    document.querySelectorAll('.login-screen, .settings-screen, .game-screen, .ranking-screen, .profile-screen').forEach(screen => {
+        screen.style.display = 'none';
+    });
+    
+    document.getElementById('updatesScreen').style.display = 'block';
+    document.getElementById('currentVersionBadge').textContent = CURRENT_VERSION;
+    
+    loadUpdatesHistory();
+    playSound('click');
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Închide pagina de update-uri
+function closeUpdatesHistory() {
+    document.getElementById('updatesScreen').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'block';
+    playSound('click');
+}
+
+// Încarcă istoricul update-urilor
+async function loadUpdatesHistory() {
+    const container = document.getElementById('updatesTimeline');
+    
+    try {
+        const response = await fetch(UPDATES_JSON_URL + '?t=' + Date.now(), {
+            cache: 'no-cache'
+        });
+        
+        if (!response.ok) {
+            throw new Error('Nu s-a putut încărca istoricul');
+        }
+        
+        const data = await response.json();
+        const updates = data.updates || [];
+        
+        if (updates.length === 0) {
+            container.innerHTML = `
+                <div class="updates-empty">
+                    <div class="updates-empty-icon">📜</div>
+                    <h3>Niciun update încă</h3>
+                    <p>Istoricul update-urilor va apărea aici.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = updates.map((update, index) => `
+            <div class="update-card ${update.type}" style="animation-delay: ${index * 0.1}s">
+                <div class="update-header-card">
+                    <div class="update-title-row">
+                        <div class="update-version">
+                            ${update.title}
+                            <span class="update-type-badge ${update.type}">${getUpdateTypeLabel(update.type)}</span>
+                        </div>
+                        <div class="update-date">
+                            📅 ${formatUpdateDate(update.releaseDate)}
+                        </div>
+                    </div>
+                    <div class="update-description">
+                        Versiune: <strong>${update.version}</strong>
+                    </div>
+                </div>
+                
+                <div class="update-changes">
+                    ${update.changes.map(category => `
+                        <div class="change-category">
+                            <div class="change-category-title">${category.category}</div>
+                            <ul class="change-items">
+                                ${category.items.map(item => `
+                                    <li class="change-item">${item}</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                ${update.notes ? `
+                    <div class="update-notes">
+                        <div class="update-notes-title">📝 Note importante:</div>
+                        <p class="update-notes-text">${update.notes}</p>
+                    </div>
+                ` : ''}
+            </div>
+        `).join('');
+        
+        console.log(`✅ Încărcat ${updates.length} update-uri din istoric`);
+        
+    } catch (error) {
+        console.error('❌ Eroare încărcare update-uri:', error);
+        container.innerHTML = `
+            <div class="updates-empty">
+                <div class="updates-empty-icon">⚠️</div>
+                <h3>Eroare la încărcare</h3>
+                <p>Nu s-a putut încărca istoricul update-urilor.</p>
+                <button class="btn btn-primary" onclick="loadUpdatesHistory()" style="margin-top: 20px;">
+                    🔄 Încearcă din nou
+                </button>
+            </div>
+        `;
+    }
+}
+
+// Formatează tipul de update
+function getUpdateTypeLabel(type) {
+    const labels = {
+        'major': 'Major',
+        'minor': 'Minor',
+        'patch': 'Patch'
+    };
+    return labels[type] || 'Update';
+}
+
+// Formatează data
+function formatUpdateDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ro-RO', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+}
+
+console.log('📜 Sistem Istoric Update-uri inițializat!');
+
+
+function showEnhancedUpdateNotification(versionData) {
+    const category = UPDATE_CATEGORIES[versionData.type] || UPDATE_CATEGORIES.minor;
+
+    const modal = document.createElement('div');
+    modal.id = 'updateModal';
+    modal.className = 'update-modal-enhanced';
+
+    modal.innerHTML = `
+        <div class="update-modal-content">
+            <!-- Header cu emoji mare și titlu -->
+            <div class="update-header">
+                <div class="update-emoji-large">${category.emoji}</div>
+                <h2 class="update-main-title">${category.title} Disponibil!</h2>
+                <p class="update-category-desc">${category.description}</p>
+            </div>
+            
+            <!-- Badge cu versiune și data -->
+            <div class="update-version-badge" style="border-color: ${category.color};">
+                <div class="version-info">
+                    <span class="version-label">Versiune Nouă</span>
+                    <span class="version-number">${versionData.version}</span>
+                </div>
+                <div class="version-date">
+                    📅 ${formatFriendlyDate(versionData.releaseDate)}
+                </div>
+            </div>
+            
+            <!-- Impact indicator -->
+            <div class="update-impact-indicator" style="background: ${category.color}20; border-left: 4px solid ${category.color}">
+                <strong>Impact:</strong> ${category.impact}
+            </div>
+            
+            <!-- Secțiune: Ce este nou? -->
+            <div class="update-whats-new">
+                <h3>🎁 Ce este nou în această versiune?</h3>
+                <div class="changes-categorized">
+                    ${renderCategorizedChanges(versionData.changes)}
+                </div>
+            </div>
+            
+            <!-- Beneficii pentru utilizator -->
+            ${renderUserBenefits(versionData.benefits)}
+            
+            <!-- Timp estimat pentru update -->
+            <div class="update-time-estimate">
+                <span class="time-icon">⏱️</span>
+                <span>Actualizare rapidă: <strong>~${versionData.estimatedTime || '10'} secunde</strong></span>
+                <span class="guarantee">✓ Datele tale rămân salvate</span>
+            </div>
+            
+            <!-- Butoane de acțiune -->
+            <div class="update-actions">
+                <button class="btn-update-primary" onclick="performEnhancedUpdate('${versionData.updateUrl}')">
+                    🚀 Actualizează Acum
+                    <span class="btn-subtitle">Recomandat</span>
+                </button>
+                <button class="btn-update-secondary" onclick="dismissUpdate()">
+                    ⏰ Amână
+                    <span class="btn-subtitle">Voi actualiza mai târziu</span>
+                </button>
+            </div>
+            
+            <!-- Link către istoric complet -->
+            <div class="update-footer">
+                <a href="javascript:showDetailedUpdateInfo('${versionData.version}')" class="update-learn-more">
+                    📖 Vezi detalii complete despre update
+                </a>
+                <a href="javascript:showUpdatesHistory()" class="update-history-link">
+                    📜 Istoric update-uri
+                </a>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    animateModalEntry(modal);
+    playSound('badge');
+}
+
+// Formatare dată mai prietenoasă
+function formatFriendlyDate(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return 'Astăzi';
+    if (diffDays === 1) return 'Ieri';
+    if (diffDays < 7) return `Acum ${diffDays} zile`;
+
+    return date.toLocaleDateString('ro-RO', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+}
+
+// Render categorii de schimbări cu icoane
+function renderCategorizedChanges(changes) {
+    const categoryIcons = {
+        'Funcții Noi': '✨',
+        'Îmbunătățiri': '🔧',
+        'Corecturi': '🐛',
+        'Performanță': '⚡',
+        'Design': '🎨',
+        'Securitate': '🔒'
+    };
+
+    return changes.map(category => `
+        <div class="change-category-card">
+            <div class="category-header">
+                <span class="category-icon">${categoryIcons[category.category] || '📌'}</span>
+                <h4>${category.category}</h4>
+            </div>
+            <ul class="change-items-friendly">
+                ${category.items.map(item => `
+                    <li class="change-item-enhanced">
+                        <span class="checkmark">✓</span>
+                        <span class="item-text">${item}</span>
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+    `).join('');
+}
+
+// Beneficii pentru utilizator - nou!
+function renderUserBenefits(benefits) {
+    if (!benefits || benefits.length === 0) return '';
+
+    return `
+        <div class="update-benefits-section">
+            <h3>💡 De ce să actualizezi acum?</h3>
+            <div class="benefits-grid">
+                ${benefits.map(benefit => `
+                    <div class="benefit-card">
+                        <div class="benefit-icon">${benefit.icon}</div>
+                        <div class="benefit-text">
+                            <strong>${benefit.title}</strong>
+                            <p>${benefit.description}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}

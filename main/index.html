@@ -41,6 +41,29 @@
             </div>
         </div>
 
+        <!-- ==================== ECRAN ISTORIC UPDATE-URI ==================== -->
+        <div class="updates-screen" id="updatesScreen" style="display: none;">
+            <div class="updates-container">
+                <div class="updates-header">
+                    <button class="btn btn-secondary updates-back-btn" onclick="closeUpdatesHistory()">← Înapoi</button>
+                    <h1 class="updates-title">📜 Istoric Update-uri</h1>
+                    <div class="updates-version-badge">
+                        Versiune Curentă: <strong id="currentVersionBadge">1.0.0</strong>
+                    </div>
+                </div>
+
+                <div class="updates-main">
+                    <!-- Lista de update-uri va fi generată dinamic -->
+                    <div class="updates-timeline" id="updatesTimeline">
+                        <div class="updates-loading">
+                            <div class="loading-spinner"></div>
+                            <p>Se încarcă istoricul...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- ==================== ECRAN SETĂRI ==================== -->
         <div class="settings-screen" id="settingsScreen">
             <h1 class="settings-title">⚙️ Setări Joc</h1>
@@ -799,11 +822,89 @@
         </div>
     </div>
 
-    <!-- Buton Admin (ascuns) -->
-    <div style="position: fixed; bottom: 10px; right: 10px; opacity: 0.2; transition: opacity 0.3s;"
-         onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.2'">
-        <button class="btn btn-secondary" onclick="showAdminLogin()" style="font-size: 12px; padding: 8px 15px;">
-            🔐 Admin
+    <!-- ==================== BUTOANE UTILITY (DREAPTA-JOS) ==================== -->
+    <div class="utility-buttons" style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 9999;
+        opacity: 0.3;
+        transition: opacity 0.3s ease;
+    " onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.3'">
+
+        <!-- Buton Update -->
+        <button class="utility-btn" onclick="manualUpdateCheck()"
+                style="
+                    background: linear-gradient(135deg, #10b981, #059669);
+                    color: white;
+                    border: none;
+                    padding: 12px 20px;
+                    border-radius: 12px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    white-space: nowrap;
+                "
+                onmouseover="this.style.transform='translateY(-3px) scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.4)'"
+                onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(16, 185, 129, 0.3)'"
+                title="Verifică dacă există versiuni noi">
+            🔄 <span>Update</span>
+        </button>
+
+        <!-- Buton Admin -->
+        <button class="utility-btn" onclick="showAdminLogin()"
+                style="
+                    background: linear-gradient(135deg, #667eea, #764ba2);
+                    color: white;
+                    border: none;
+                    padding: 12px 20px;
+                    border-radius: 12px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    white-space: nowrap;
+                "
+                onmouseover="this.style.transform='translateY(-3px) scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)'"
+                onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)'"
+                title="Panou de administrare">
+            🔐 <span>Admin</span>
+        </button>
+
+        <!-- ✅ BUTON ISTORIC UPDATE-URI -->
+        <button class="utility-btn" onclick="showUpdatesHistory()"
+                style="
+                    background: linear-gradient(135deg, #f59e0b, #d97706);
+                    color: white;
+                    border: none;
+                    padding: 12px 20px;
+                    border-radius: 12px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    white-space: nowrap;
+                "
+                onmouseover="this.style.transform='translateY(-3px) scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(245, 158, 11, 0.4)'"
+                onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 15px rgba(245, 158, 11, 0.3)'"
+                title="Vezi istoricul update-urilor">
+            📜 <span>Istoric</span>
         </button>
     </div>
 
@@ -897,22 +998,6 @@
             <h3 style="margin: 30px 0 20px 0;">🔍 Analiza Întrebărilor</h3>
             <div class="test-questions-review" id="questionsReview"></div>
         </div>
-    </div>
-
-    <!-- Buton Admin (ascuns) -->
-    <div style="position: fixed; bottom: 10px; right: 10px; opacity: 0.2; transition: opacity 0.3s;"
-         onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.2'">
-        <button class="btn btn-secondary" onclick="showAdminLogin()" style="font-size: 12px; padding: 8px 15px;">
-            🔐 Admin
-        </button>
-    </div>
-
-    <!-- ✅ ADAUGĂ BUTON UPDATE -->
-    <div style="position: fixed; bottom: 10px; left: 10px; opacity: 0.2; transition: opacity 0.3s;"
-         onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.2'">
-        <button class="btn btn-secondary" onclick="manualUpdateCheck()" style="font-size: 12px; padding: 8px 15px;" data-tooltip="Verifică dacă există versiuni noi">
-            🔄 Update
-        </button>
     </div>
 
     <script src="script.js"></script>

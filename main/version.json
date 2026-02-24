@@ -1,4 +1,40 @@
 {
+  "version": "1.1.0",
+  "releaseDate": "2026-02-25",
+  "changes": [
+    "🔄 Sistem Auto-Update inteligent",
+    "📜 Istoric complet de update-uri",
+    "💾 Backup automat al datelor",
+    "🎨 Notificări moderne pentru update-uri",
+    "⏰ Verificare automată zilnică"
+  ],
+  "type": "minor",
+  "estimatedTime": "15",
+  "benefits": [
+    {
+      "icon": "🔄",
+      "title": "Update-uri Automate",
+      "description": "Aplicația verifică automat versiuni noi și te anunță elegant"
+    },
+    {
+      "icon": "💾",
+      "title": "Date Sigure",
+      "description": "Toate datele tale sunt salvate automat înainte de update"
+    },
+    {
+      "icon": "📜",
+      "title": "Istoric Transparent",
+      "description": "Vezi tot ce s-a schimbat în fiecare versiune"
+    }
+  ],
+  "files": {
+    "script.js": "https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/main/script.js",
+    "style.css": "https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/main/style.css",
+    "index.html": "https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/main/index.html"
+  },
+  "updateUrl": "https://CiofoaiaAndrei.github.io/math-game/"
+}
+{
   "version": "1.0.0",
   "releaseDate": "2024-02-24",
   "changes": [

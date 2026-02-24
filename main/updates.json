@@ -1,45 +1,314 @@
 {
   "updates": [
     {
-      "version": "1.0.0",
-      "releaseDate": "2024-02-23",
-      "title": "🎉 Lansare Oficială",
-      "type": "major",
+      "version": "1.1.0",
+      "title": "🔄 Sistem Auto-Update Inteligent",
+      "type": "minor",
+      "releaseDate": "2026-02-25",
+      "summary": "Implementare sistem complet de verificare și aplicare automată a update-urilor",
+      "estimatedTime": "15",
+      "breaking": false,
+      "security": false,
+      "performance": false,
+      "benefits": [
+        {
+          "icon": "🔄",
+          "title": "Update-uri Automate",
+          "description": "Aplicația verifică automat versiuni noi la fiecare 24h și te anunță elegant"
+        },
+        {
+          "icon": "💾",
+          "title": "Date 100% Sigure",
+          "description": "Backup automat al tuturor datelor înainte de update - nimic nu se pierde!"
+        },
+        {
+          "icon": "📜",
+          "title": "Istoric Complet",
+          "description": "Vezi toate schimbările din fiecare versiune într-un format frumos și ușor de citit"
+        },
+        {
+          "icon": "⚡",
+          "title": "Rapid și Simplu",
+          "description": "Update-urile se aplică în 10-15 secunde, fără efort din partea ta"
+        }
+      ],
       "changes": [
         {
-          "category": "✨ Funcționalități Noi",
+          "category": "🔄 Sistem Auto-Update",
           "items": [
-            "Sistem complet de jocuri matematice (Normal, Test Fulger, Cursă, Aleatoriu, Puzzle, Duel)",
-            "Profiluri personalizabile cu avatar-uri și teme de culoare",
-            "Sistem XP avansat cu nivele și recompense zilnice",
-            "Badge-uri și realizări deblokabile",
-            "Grafice de performanță și statistici detaliate",
-            "Calendar de activitate și obiective zilnice",
-            "Mod Duel pentru competiție Ema vs Rareș",
-            "Panou Admin complet pentru părinți"
+            "Verificare automată de versiuni noi la pornirea aplicației",
+            "Check periodic la fiecare 24 ore pentru update-uri",
+            "Modal elegant cu detalii despre versiunea nouă",
+            "Buton manual 'Update' în colțul din dreapta jos",
+            "Sistem de notificări diferențiate (major, minor, patch)",
+            "Dismiss update și amânare automată cu 24h",
+            "Tracking ultima verificare în localStorage"
           ]
         },
         {
-          "category": "🎨 Design & UX",
+          "category": "💾 Backup și Siguranță",
           "items": [
-            "Interfață modernă cu animații fluide",
-            "6 teme de culoare personalizabile (Purple, Blue, Green, Pink, Orange, Rainbow)",
-            "Mascotă interactivă pentru ajutor",
-            "Efecte sonore și notificări vizuale",
-            "Design responsive pentru toate ecranele"
+            "Backup automat al tuturor datelor înainte de update",
+            "Salvare profile utilizatori (avatar, nivel, XP, tema)",
+            "Salvare ranking complet și statistici",
+            "Salvare badge-uri și realizări",
+            "Salvare setări (sunet, temă)",
+            "Restaurare automată după update",
+            "Verificare integritate date după restaurare"
           ]
         },
         {
-          "category": "📊 Statistici & Tracking",
+          "category": "📜 Istoric Update-uri",
           "items": [
-            "Ranking global cu istoric complet",
-            "Progres per operație matematică",
-            "Grafic evoluție performanță",
-            "Export date CSV și rapoarte detaliate"
+            "Pagină dedicată pentru istoric complet",
+            "Afișare cronologică a tuturor versiunilor",
+            "Categorizare schimbări (funcții noi, îmbunătățiri, bug-fix)",
+            "Badge-uri colorate pentru tipul de update (major/minor/patch)",
+            "Link rapid către istoric din notificarea de update",
+            "Buton 'Istoric Update-uri' în utility buttons",
+            "Design timeline modern cu animații"
+          ]
+        },
+        {
+          "category": "🎨 UI/UX Îmbunătățit",
+          "items": [
+            "Modal modern pentru notificări de update",
+            "Animații smooth (fadeIn, slideUp, bounce)",
+            "Loading spinner elegant în timpul update-ului",
+            "Mesaje prietenoase și explicații clare",
+            "Emoji și iconițe pentru fiecare tip de schimbare",
+            "Design responsive pentru toate dispozitivele",
+            "Tooltips explicative pentru butoane"
+          ]
+        },
+        {
+          "category": "🔧 Funcționalități Tehnice",
+          "items": [
+            "Fetch dinamic din GitHub pentru version.json",
+            "Cache busting cu timestamp pentru verificări",
+            "Sistem de versioning semantic (major.minor.patch)",
+            "Error handling pentru cereri failed",
+            "Logging detaliat în consolă pentru debugging",
+            "Funcție manualUpdateCheck() pentru verificare la cerere",
+            "scheduleUpdateCheck() pentru verificări programate"
+          ]
+        },
+        {
+          "category": "📊 Metadata și Configurare",
+          "items": [
+            "Fișier version.json cu info versiune curentă",
+            "Fișier updates.json cu istoric complet",
+            "URL-uri configurabile pentru fișiere GitHub",
+            "Interval personalizabil pentru verificări (24h default)",
+            "Constante globale pentru URL-uri (VERSION_CHECK_URL, UPDATES_JSON_URL)",
+            "Variabilă CURRENT_VERSION în script.js"
+          ]
+        },
+        {
+          "category": "✨ Funcții Noi",
+          "items": [
+            "checkForUpdates(showNoUpdateMessage) - verificare versiuni",
+            "showUpdateNotification(versionData) - afișare modal update",
+            "performUpdate(updateUrl) - executare actualizare",
+            "dismissUpdate() - amânare update",
+            "restoreBackupData() - restaurare date după update",
+            "scheduleUpdateCheck() - programare verificări automate",
+            "manualUpdateCheck() - buton verificare manuală",
+            "showUpdatesHistory() - afișare istoric complet",
+            "loadUpdatesHistory() - încărcare date istoric",
+            "formatFriendlyDate() - formatare date prietenoase"
+          ]
+        },
+        {
+          "category": "🎯 Experiență Utilizator",
+          "items": [
+            "Mesaj 'Aplicația este la zi!' dacă nu există update-uri",
+            "Explicare clară a beneficiilor fiecărui update",
+            "Estimare timp actualizare (10-15 secunde)",
+            "Garanție că datele rămân salvate",
+            "Confetti și sunete la update reușit",
+            "Mascota afișează mesaj de confirmare",
+            "Link către changelog complet în notificare"
           ]
         }
       ],
-      "notes": "Prima versiune stabilă a aplicației cu toate funcționalitățile de bază implementate."
+      "notes": "Această versiune introduce infrastructura completă pentru gestionarea update-urilor aplicației. Toate update-urile viitoare vor beneficia de acest sistem automat, asigurând o experiență fluidă și sigură pentru utilizatori. Datele sunt păstrate 100% prin sistemul de backup automat."
+    },
+    {
+      "version": "1.0.0",
+      "title": "🎉 Lansare Oficială - Matematică Distractivă",
+      "type": "major",
+      "releaseDate": "2024-02-24",
+      "changes": [
+        {
+          "category": "🎮 Moduri de Joc",
+          "items": [
+            "Joc Normal - 10 întrebări cu timer personalizabil",
+            "Test Fulger - 20 calcule pe hârtie digitală",
+            "Mod Cursă - 20 calcule cât mai repede (cu cronometru)",
+            "Mod Aleatoriu - Operații surpriză mixte",
+            "Mod Puzzle - Deblochează imaginea (16 piese)",
+            "Mod Duel - Ema vs Rareș (10 runde competitive)"
+          ]
+        },
+        {
+          "category": "💰 Sistem Progresie",
+          "items": [
+            "Sistem XP cu calcul complex (scor, acuratețe, multiplicatori)",
+            "Level-up automat cu confetti și animații",
+            "XP Max crește cu 50% la fiecare nivel",
+            "Bonus XP pentru teste (20 XP extra)",
+            "Bonus acuratețe: 100% = +50 XP, 90% = +30 XP",
+            "Multiplicator nivel: +2% XP per nivel",
+            "Tracking total XP câștigat vreodată"
+          ]
+        },
+        {
+          "category": "🏆 Badge-uri și Realizări",
+          "items": [
+            "👣 Primul Pas - Prima întrebare corectă",
+            "🔥 Trei la Rând - 3 răspunsuri corecte consecutive",
+            "⚡ Cinci la Rând - 5 consecutive",
+            "💯 Perfect 10 - 10 consecutive",
+            "🏆 Test Perfect - 100% în test",
+            "⚡ Fulger - Răspuns <3 secunde",
+            "🎯 Antrenament - 10 jocuri completate",
+            "🎓 Maestru - 1000+ puncte totale",
+            "🗡️ Războinic - 7 zile consecutive login",
+            "🏃 Demon de Viteză - 10 răspunsuri <5 sec"
+          ]
+        },
+        {
+          "category": "👤 Sistem Profiluri",
+          "items": [
+            "2 profiluri independente: Ema și Rareș",
+            "48 avatar-uri disponibile (emoji, animale, spațiu, mâncare)",
+            "6 teme color personalizabile per utilizator",
+            "Statistici detaliate: nivel, XP, jocuri, acuratețe",
+            "Grafic performanță ultimele 10 jocuri",
+            "Calendar activitate 28 zile cu heatmap",
+            "9 titluri deblokabile (Începător → Legendă)",
+            "Obiective zilnice cu recompense XP",
+            "Progres per operație (adunare, scădere, etc.)",
+            "Best streak și recorduri personale"
+          ]
+        },
+        {
+          "category": "🎨 Design și UX",
+          "items": [
+            "6 teme: Purple, Blue, Green, Pink, Orange, Rainbow",
+            "Design responsive (mobile, tablet, desktop)",
+            "Animații smooth cu CSS transitions",
+            "Confetti animate la realizări",
+            "Particule de fundal ambient",
+            "Feedback vizual pentru răspunsuri corecte/greșite",
+            "Progress bar animat",
+            "Mascota interactivă clicabilă",
+            "Modal-uri elegante pentru notificări",
+            "Gradient backgrounds dinamic"
+          ]
+        },
+        {
+          "category": "🎁 Sistem Recompense",
+          "items": [
+            "Recompensă zilnică (verificare la 24h)",
+            "Bonus streak zilnic (+10 XP per zi, max +100 XP)",
+            "Badge 'Războinic' pentru 7 zile consecutive",
+            "Confetti și sunete la level up",
+            "Notificări animate pentru badge-uri noi",
+            "Realizări automate salvate în profil",
+            "Tracking milestone-uri XP (100, 500, 1000, 5000, 10000)"
+          ]
+        },
+        {
+          "category": "🔧 Features Tehnice",
+          "items": [
+            "LocalStorage pentru salvare progres",
+            "Backup automat date la update",
+            "Verificare versiuni la pornire",
+            "Export statistici CSV și TXT",
+            "Sistem admin cu parolă",
+            "Ranking global top 20",
+            "Detalii test cu review întrebări",
+            "Suport Enter key pentru submit",
+            "Timer cu warning vizual la 5 sec",
+            "Generator numere adaptat (1-2 cifre)"
+          ]
+        },
+        {
+          "category": "🎵 Audio și Sunete",
+          "items": [
+            "Sunete procedural generate cu Web Audio API",
+            "5 tipuri: correct, wrong, badge, click, timer",
+            "Toggle mute/unmute persistent",
+            "Frecvențe muzicale reale (C5, G3, E5, etc.)",
+            "Fade out smooth pentru sunete",
+            "Sunet special pentru badge-uri (3 tonuri)"
+          ]
+        },
+        {
+          "category": "📊 Statistici și Admin",
+          "items": [
+            "Dashboard admin cu overview general",
+            "Statistici per utilizator (Ema, Rareș)",
+            "Istoric ultimi 10 rezultate",
+            "Grafice comparație utilizatori",
+            "Export rapoarte detaliate",
+            "Resetare selectivă statistici",
+            "Exerciții custom personalizate",
+            "Schimbare parolă admin",
+            "Vizualizare badge-uri câștigate",
+            "Calendar activitate săptămânal"
+          ]
+        },
+        {
+          "category": "🎯 Gameplay Features",
+          "items": [
+            "4 operații matematice: +, -, ×, ÷",
+            "Limită max personalizabilă: 20, 50, 100, 200, 500, 1000",
+            "Selectare cifre: auto, 1 cifră, 2 cifre, mixte",
+            "Format afișare: inline sau vertical",
+            "3 hints per joc cu explicații detaliate",
+            "Skip întrebare opțional",
+            "Timer pauzabil în anumite moduri",
+            "Feedback instant corect/greșit",
+            "Streak counter vizual",
+            "Progress bar în timp real"
+          ]
+        }
+      ],
+      "notes": "Prima versiune completă cu toate feature-urile implementate. Optimizat pentru copii 8-12 ani cu focus pe gamification și motivație."
     }
-  ]
+  ],
+  "changelog": {
+    "upcoming": [
+      {
+        "version": "1.2.0",
+        "plannedDate": "2026-03-15",
+        "features": [
+          "Mod multiplayer online",
+          "Leaderboard global",
+          "Power-ups în timpul jocului",
+          "Sistem achievement mai complex",
+          "Mini-jocuri bonus",
+          "Suport alte limbi (EN, FR)"
+        ]
+      }
+    ],
+    "backlog": [
+      "Statistici grafice avansate",
+      "Export PDF rapoarte",
+      "Sistem de nivele cu teme deblokabile",
+      "Mod tutorial interactiv",
+      "Integrare notificări push",
+      "PWA pentru instalare ca aplicație"
+    ]
+  },
+  "metadata": {
+    "totalUpdates": 2,
+    "lastUpdated": "2026-02-25T10:00:00Z",
+    "nextCheckDate": "2026-03-01",
+    "supportedVersions": [ "1.0.0", "1.1.0" ],
+    "deprecatedVersions": []
+  }
 }
