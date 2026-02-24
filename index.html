@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matematică Distractivă - Ema & Rareș</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- ==================== ECRAN LOGIN ==================== -->
+        <div class="login-screen" id="loginScreen">
+            <h1 class="login-title">🎓<br>Matematică Distractivă</h1>
+            <p class="login-subtitle">Alege jucătorul pentru a începe!</p>
+
+            <div class="user-selection">
+                <div class="user-card ema" onclick="selectUser('Ema')">
+                    <div class="user-avatar">👧</div>
+                    <div class="user-name">Ema</div>
+                    <div class="user-stats">🏆 Best: <span id="emaBest">0</span> puncte</div>
+                    <button class="btn btn-secondary user-profile-btn" onclick="event.stopPropagation(); openProfile('Ema')" style="margin-top: 15px; width: 100%;">
+                        👤 Vezi Profil
+                    </button>
+                </div>
+
+                <div class="user-card rares" onclick="selectUser('Rareș')">
+                    <div class="user-avatar">👦</div>
+                    <div class="user-name">Rareș</div>
+                    <div class="user-stats">🏆 Best: <span id="raresBest">0</span> puncte</div>
+                    <button class="btn btn-secondary user-profile-btn" onclick="event.stopPropagation(); openProfile('Rareș')" style="margin-top: 15px; width: 100%;">
+                        👤 Vezi Profil
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <button class="btn btn-secondary" onclick="showRanking()" style="font-size: 16px;">
+                    🏆 Vezi Ranking-ul
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== ECRAN SETĂRI ==================== -->
+        <div class="settings-screen" id="settingsScreen">
+            <h1 class="settings-title">⚙️ Setări Joc</h1>
+            <p style="color: #666; font-size: 1.1em; margin-bottom: 30px;">
+                Salut, <strong><span id="selectedUserName"></span></strong>! <span id="selectedUserAvatar"></span>
+            </p>
+
+            <!-- Mod Joc - EXTINS -->
+            <div class="settings-section">
+                <div class="settings-label">🎮 Alege modul de joc:</div>
+                <div class="format-selector" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                    <div class="format-card active" onclick="selectGameMode('normal')">
+                        <div class="format-icon">🎯</div>
+                        <div class="format-name">Joc Normal</div>
+                        <div class="format-desc">10 întrebări cu timer</div>
+                    </div>
+                    <div class="format-card" onclick="selectGameMode('test')">
+                        <div class="format-icon">📝</div>
+                        <div class="format-name">Test Fulger</div>
+                        <div class="format-desc">20 calcule ca la școală</div>
+                    </div>
+                    <div class="format-card" onclick="selectGameMode('race')">
+                        <div class="format-icon">🏃</div>
+                        <div class="format-name">Mod Cursă</div>
+                        <div class="format-desc">Cât de repede poți?</div>
+                    </div>
+                    <div class="format-card" onclick="selectGameMode('random')">
+                        <div class="format-icon">🎲</div>
+                        <div class="format-name">Mod Aleatoriu</div>
+                        <div class="format-desc">Operații mixte</div>
+                    </div>
+                    <div class="format-card" onclick="selectGameMode('puzzle')">
+                        <div class="format-icon">🧩</div>
+                        <div class="format-name">Mod Puzzle</div>
+                        <div class="format-desc">Deblochează imaginea</div>
+                    </div>
+                    <div class="format-card" onclick="selectGameMode('duel')">
+                        <div class="format-icon">⚔️</div>
+                        <div class="format-name">Mod Duel</div>
+                        <div class="format-desc">Ema vs Rareș</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timp (doar pentru Joc Normal) -->
+            <div class="settings-section" id="timeSettings">
+                <div class="settings-label">⏱️ Alege timpul per calcul:</div>
+                <div class="time-selector">
+                    <button class="time-btn" onclick="selectTime(5)">5 sec</button>
+                    <button class="time-btn active" onclick="selectTime(10)">10 sec</button>
+                    <button class="time-btn" onclick="selectTime(15)">15 sec</button>
+                    <button class="time-btn" onclick="selectTime(20)">20 sec</button>
+                    <button class="time-btn" onclick="selectTime(30)">30 sec</button>
+                </div>
+            </div>
+
+            <!-- Tip Calcule (doar pentru Test Fulger) -->
+            <div class="settings-section hidden" id="calculationTypeSettings">
+                <div class="settings-label">🔢 Tipul calculelor pentru test:</div>
+                <div class="time-selector">
+                    <button class="time-btn active" onclick="selectCalculationType('all')">Toate</button>
+                    <button class="time-btn" onclick="selectCalculationType('add')">➕ Adunări</button>
+                    <button class="time-btn" onclick="selectCalculationType('sub')">➖ Scăderi</button>
+                    <button class="time-btn" onclick="selectCalculationType('mul')">✖ Înmulțiri</button>
+                    <button class="time-btn" onclick="selectCalculationType('div')">➗ Împărțiri</button>
+                </div>
+            </div>
+
+            <!-- Format Calcule -->
+            <div class="settings-section">
+                <div class="settings-label">📐 Alege formatul calculelor:</div>
+                <div class="format-selector">
+                    <div class="format-card active" onclick="selectFormat('inline')">
+                        <div class="format-icon">➡️</div>
+                        <div class="format-name">În linie</div>
+                        <div class="format-desc">7 + 3 = ?</div>
+                    </div>
+                    <div class="format-card" onclick="selectFormat('stacked')">
+                        <div class="format-icon">⬇️</div>
+                        <div class="format-name">Vertical</div>
+                        <div class="format-desc">Unul sub altul</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Limită Maximă -->
+            <div class="settings-section">
+                <div class="settings-label">🎯 Limită maximă pentru calcule:</div>
+                <div class="time-selector">
+                    <button class="time-btn active" onclick="selectMaxLimit(100)">100</button>
+                    <button class="time-btn" onclick="selectMaxLimit(200)">200</button>
+                    <button class="time-btn" onclick="selectMaxLimit(500)">500</button>
+                    <button class="time-btn" onclick="selectMaxLimit(1000)">1000</button>
+                </div>
+            </div>
+
+            <!-- Număr Cifre -->
+            <div class="settings-section" id="digitSettings">
+                <div class="settings-label">🔢 Numărul de cifre pentru numere:</div>
+                <div class="time-selector">
+                    <button class="time-btn active" onclick="selectDigitType('auto')">🎲 Automat</button>
+                    <button class="time-btn" onclick="selectDigitType('single')">1️⃣ O cifră (1-9)</button>
+                    <button class="time-btn" onclick="selectDigitType('double')">2️⃣ Două cifre (10-99)</button>
+                    <button class="time-btn" onclick="selectDigitType('mixed')">🔀 Mixt</button>
+                </div>
+                <div id="digitExplanation" style="margin-top: 15px; padding: 12px; background: rgba(102, 126, 234, 0.1); border-radius: 10px; font-size: 0.9em; color: #667eea;">
+                    <strong>ℹ️ Explicație:</strong> <span id="digitExplanationText">Numerele vor fi alese automat în funcție de limita maximă.</span>
+                </div>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 40px;">
+                <button class="btn btn-primary" onclick="startGame()">🚀 Start Joc</button>
+                <button class="btn btn-secondary" onclick="backToLoginFromSettings()">← Înapoi</button>
+            </div>
+        </div>
+
+        <!-- ==================== ECRAN JOC ==================== -->
+        <div class="game-screen" id="gameScreen">
+            <div class="header">
+                <div class="player-info" id="playerInfo"></div>
+                <div class="timer-container">
+                    <div class="timer-label">Timp rămas</div>
+                    <div class="timer-value" id="timerValue">10</div>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">Scor</div>
+                    <div class="stat-value" id="score">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Corecte</div>
+                    <div class="stat-value" id="correct">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Greșite</div>
+                    <div class="stat-value" id="wrong">0</div>
+                </div>
+            </div>
+
+            <div class="streak" id="streak" style="display: none;">
+                🔥 <span id="streakCount">0</span> Streak!
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="setMode('add')" id="addTab">➕ Adunări</button>
+                <button class="tab-btn" onclick="setMode('sub')" id="subTab">➖ Scăderi</button>
+                <button class="tab-btn" onclick="setMode('mul')" id="mulTab">✖ Înmulțiri</button>
+                <button class="tab-btn" onclick="setMode('div')" id="divTab">➗ Împărțiri</button>
+            </div>
+
+            <div id="question"></div>
+
+            <div class="question-stacked-container" id="questionStackedContainer">
+                <div class="question-stacked" id="questionStacked"></div>
+            </div>
+
+            <div class="multi-input-container" id="multiInputContainer">
+                <div class="multiplication-paper" id="multiplicationPaper"></div>
+            </div>
+
+            <div class="input-container" id="singleInputContainer">
+                <input type="number" id="answer" placeholder="?" autocomplete="off">
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="checkAnswer()" data-tooltip="Verifică răspunsul">✓ Verifică</button>
+                <button class="btn btn-secondary" onclick="showHint()" data-tooltip="Primește un indiciu">💡 Hint</button>
+                <button class="btn btn-secondary" onclick="skipQuestion()" data-tooltip="Sari la următoarea">⏭ Sari</button>
+                <button class="btn btn-logout" onclick="logout()" data-tooltip="Ieși din joc">🚪 Ieșire</button>
+            </div>
+
+            <div id="feedback"></div>
+        </div>
+
+        <!-- ==================== ECRAN TEST FULGER ==================== -->
+        <div class="test-screen" id="testScreen">
+            <div class="test-header">
+                <h2>📝 Test Fulger de Matematică</h2>
+                <p class="test-info">
+                    Elev: <strong id="testStudentName"></strong> |
+                    Limită: <strong id="testMaxLimit"></strong> |
+                    Tip: <strong id="testCalculationType"></strong>
+                </p>
+            </div>
+
+            <div class="test-paper" id="testPaper"></div>
+
+            <div class="test-actions">
+                <button class="btn btn-primary" onclick="submitTest()">✓ Predă Testul</button>
+                <button class="btn btn-secondary" onclick="cancelTest()">✖ Renunță</button>
+            </div>
+        </div>
+
+        <!-- ==================== ECRAN REZULTAT TEST ==================== -->
+        <div class="test-result-screen" id="testResultScreen">
+            <div class="test-paper-graded" id="testPaperGraded"></div>
+            <div class="teacher-feedback" id="teacherFeedback"></div>
+            <div class="action-buttons" style="margin-top: 30px;">
+                <button class="btn btn-primary" onclick="retakeTest()">🔄 Mai fă un test</button>
+                <button class="btn btn-secondary" onclick="backToLoginFromTest()">← Înapoi</button>
+            </div>
+        </div>
+
+        <!-- ==================== ECRAN RANKING ==================== -->
+        <div class="ranking-screen" id="rankingScreen">
+            <h1 class="ranking-title">🏆 Clasament</h1>
+            <div class="ranking-table" id="rankingTable"></div>
+            <div style="margin-top: 30px; text-align: center;">
+                <button class="btn btn-primary" onclick="backToLogin()">← Înapoi</button>
+            </div>
+        </div>
+
+        <!-- ==================== ECRAN PROFIL ==================== -->
+        <div class="profile-screen" id="profileScreen">
+            <div class="profile-container">
+                <div class="profile-header">
+                    <button class="btn btn-secondary profile-back-btn" onclick="backToLoginFromProfile()">← Înapoi</button>
+                    <h1 class="profile-title">👤 Profilul meu</h1>
+                    <button class="btn btn-primary profile-edit-btn" onclick="toggleEditMode()">✏️ Editează</button>
+                </div>
+
+                <div class="profile-main">
+                    <!-- Avatar & Info -->
+                    <div class="profile-avatar-section">
+                        <div class="profile-avatar-frame" id="profileAvatarFrame">
+                            <div class="profile-avatar-img" id="profileAvatarImg">👧</div>
+                            <button class="avatar-change-btn" id="avatarChangeBtn" onclick="openAvatarSelector()" style="display: none;">
+                                📸 Schimbă
+                            </button>
+                        </div>
+                        <div class="profile-name-section">
+                            <h2 class="profile-name" id="profileName">Ema</h2>
+                            <div class="profile-level">
+                                <span class="level-badge">Nivel <span id="profileLevel">1</span></span>
+                                <div class="level-progress-bar">
+                                    <div class="level-progress-fill" id="profileLevelProgress" style="width: 0%"></div>
+                                </div>
+                                <div class="level-xp-text"><span id="profileXP">0</span> / <span id="profileXPMax">100</span> XP</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistici Rapide -->
+                    <div class="profile-quick-stats">
+                        <div class="quick-stat-card">
+                            <div class="quick-stat-icon">🎮</div>
+                            <div class="quick-stat-value" id="profileTotalGames">0</div>
+                            <div class="quick-stat-label">Jocuri</div>
+                        </div>
+                        <div class="quick-stat-card">
+                            <div class="quick-stat-icon">🏆</div>
+                            <div class="quick-stat-value" id="profileBestScore">0</div>
+                            <div class="quick-stat-label">Best Score</div>
+                        </div>
+                        <div class="quick-stat-card">
+                            <div class="quick-stat-icon">✅</div>
+                            <div class="quick-stat-value" id="profileCorrectAnswers">0</div>
+                            <div class="quick-stat-label">Corecte</div>
+                        </div>
+                        <div class="quick-stat-card">
+                            <div class="quick-stat-icon">🎯</div>
+                            <div class="quick-stat-value" id="profileAccuracy">0%</div>
+                            <div class="quick-stat-label">Acuratețe</div>
+                        </div>
+                    </div>
+
+                    <!-- Badge-uri Colecție -->
+                    <div class="profile-badges-section">
+                        <h3>🏅 Colecția mea de Badge-uri (<span id="profileBadgeCount">0</span>/<span id="profileBadgeTotal">10</span>)</h3>
+                        <div class="profile-badges-grid" id="profileBadgesGrid">
+                            <!-- Badge-urile vor fi generate dinamic -->
+                        </div>
+                    </div>
+
+                    <!-- Teme de Culoare -->
+                    <div class="profile-theme-section">
+                        <h3>🎨 Tema mea preferată</h3>
+                        <div class="profile-themes-grid">
+                            <div class="theme-card active" data-theme="purple" onclick="selectProfileTheme('purple')">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #c084fc, #a855f7)"></div>
+                                <div class="theme-name">💜 Purple</div>
+                            </div>
+                            <div class="theme-card" data-theme="blue" onclick="selectProfileTheme('blue')">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #3b82f6, #2563eb)"></div>
+                                <div class="theme-name">💙 Blue</div>
+                            </div>
+                            <div class="theme-card" data-theme="green" onclick="selectProfileTheme('green')">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #10b981, #059669)"></div>
+                                <div class="theme-name">💚 Green</div>
+                            </div>
+                            <div class="theme-card" data-theme="pink" onclick="selectProfileTheme('pink')">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #f093fb, #f5576c)"></div>
+                                <div class="theme-name">💗 Pink</div>
+                            </div>
+                            <div class="theme-card" data-theme="orange" onclick="selectProfileTheme('orange')">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #fb923c, #f97316)"></div>
+                                <div class="theme-name">🧡 Orange</div>
+                            </div>
+                            <div class="theme-card" data-theme="rainbow" onclick="selectProfileTheme('rainbow')">
+                                <div class="theme-preview" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #fbbf24 100%)"></div>
+                                <div class="theme-name">🌈 Rainbow</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Realizări Recente -->
+                    <div class="profile-achievements-section">
+                        <h3>🎯 Realizări Recente</h3>
+                        <div class="achievements-timeline" id="profileAchievements">
+                            <!-- Timeline-ul va fi generat dinamic -->
+                        </div>
+                    </div>
+
+                    <!-- Realizări Recente -->
+                    <div class="profile-achievements-section">
+                        <h3>🎯 Realizări Recente</h3>
+                        <div class="achievements-timeline" id="profileAchievements">
+                            <!-- Timeline-ul va fi generat dinamic -->
+                        </div>
+                    </div>
+
+                    <!-- ✅ NOI SECȚIUNI -->
+                    <!-- Titluri Deblokabile -->
+                    <div class="profile-titles-section">
+                        <h3>🎖️ Titlurile mele</h3>
+                        <div class="profile-current-title">
+                            <span class="current-title-label">Titlu Activ:</span>
+                            <span class="current-title-badge" id="currentTitleBadge">🏅 Începător</span>
+                        </div>
+                        <div class="profile-titles-grid" id="profileTitlesGrid">
+                            <!-- Titlurile vor fi generate dinamic -->
+                        </div>
+                    </div>
+
+                    <!-- Obiective Zilnice -->
+                    <div class="profile-daily-quests">
+                        <h3>🎯 Obiective Zilnice</h3>
+                        <div class="daily-quests-grid" id="dailyQuestsGrid">
+                            <!-- Obiectivele vor fi generate dinamic -->
+                        </div>
+                    </div>
+
+                    <!-- Grafic Performanță -->
+                    <div class="profile-performance-chart">
+                        <h3>📊 Evoluția Performanței (Ultimele 10 Jocuri)</h3>
+                        <div class="performance-chart-container">
+                            <canvas id="performanceChart" width="800" height="300"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Progres per Operație -->
+                    <div class="profile-operation-progress">
+                        <h3>🎯 Progres per Operație</h3>
+                        <div class="operation-progress-grid" id="operationProgressGrid">
+                            <!-- Progresul va fi generat dinamic -->
+                        </div>
+                    </div>
+
+                    <!-- Best Records -->
+                    <div class="profile-records">
+                        <h3>🏆 Recordurile Mele</h3>
+                        <div class="records-grid" id="recordsGrid">
+                            <!-- Recordurile vor fi generate dinamic -->
+                        </div>
+                    </div>
+
+                    <!-- Calendar Activitate -->
+                    <div class="profile-activity-calendar">
+                        <h3>📅 Calendar de Activitate</h3>
+                        <div class="activity-calendar-container" id="activityCalendar">
+                            <!-- Calendarul va fi generat dinamic -->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== MODAL SELECTARE AVATAR ==================== -->
+        <div class="avatar-selector-modal" id="avatarSelectorModal" style="display: none;">
+            <div class="avatar-selector-content">
+                <div class="avatar-selector-header">
+                    <h2>📸 Alege-ți Avatar-ul</h2>
+                    <button class="close-modal" onclick="closeAvatarSelector()">✕</button>
+                </div>
+
+                <div class="avatar-categories">
+                    <button class="avatar-cat-btn active" onclick="showAvatarCategory('emoji')">😊 Emoji</button>
+                    <button class="avatar-cat-btn" onclick="showAvatarCategory('animals')">🐾 Animale</button>
+                    <button class="avatar-cat-btn" onclick="showAvatarCategory('space')">🚀 Spațiu</button>
+                    <button class="avatar-cat-btn" onclick="showAvatarCategory('food')">🍕 Mâncare</button>
+                </div>
+
+                <div class="avatar-grid" id="avatarGrid">
+                    <!-- Avatar-urile vor fi generate dinamic -->
+                </div>
+
+                <button class="btn btn-primary" onclick="saveAvatar()" style="width: 100%; margin-top: 20px;">
+                    💾 Salvează Avatar
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== ECRAN MOD CURSĂ ==================== -->
+        <div class="race-screen" id="raceScreen">
+            <div class="race-header">
+                <h1>🏃 MOD CURSĂ - VITEZĂ MAXIMĂ!</h1>
+                <div class="race-info">
+                    <span id="racePlayer"></span> |
+                    <span id="raceProgress">0/20</span> |
+                    <span id="raceTimer">00:00</span>
+                </div>
+            </div>
+
+            <div class="race-track">
+                <div class="race-runner" id="raceRunner">🏃</div>
+                <div class="race-finish">🏁</div>
+            </div>
+
+            <div class="race-question-box">
+                <div id="raceQuestion" class="race-question"></div>
+                <input type="number" id="raceAnswer" class="race-input" placeholder="Răspuns rapid...">
+                <button class="btn btn-primary" onclick="checkRaceAnswer()">✓ Verifică (Enter)</button>
+            </div>
+
+            <div class="race-stats">
+                <div class="race-stat">⚡ Corecte: <span id="raceCorrect">0</span></div>
+                <div class="race-stat">❌ Greșite: <span id="raceWrong">0</span></div>
+                <div class="race-stat">🔥 Streak: <span id="raceStreak">0</span></div>
+            </div>
+
+            <button class="btn btn-logout" onclick="quitRace()">🚪 Renunță</button>
+        </div>
+
+        <!-- ==================== ECRAN MOD ALEATORIU ==================== -->
+        <div class="random-screen" id="randomScreen">
+            <div class="random-header">
+                <h1>🎲 MOD ALEATORIU - SURPRIZĂ!</h1>
+                <div class="random-info">
+                    <span id="randomPlayer"></span> | Întrebarea <span id="randomProgress">1/15</span>
+                </div>
+            </div>
+
+            <div class="random-mystery-box" id="randomMysteryBox">
+                <div class="mystery-icon">❓</div>
+                <p>Care va fi următoarea operație?</p>
+            </div>
+
+            <div class="random-question-container">
+                <div id="randomQuestion" class="random-question"></div>
+                <input type="number" id="randomAnswer" class="random-input" placeholder="?">
+                <button class="btn btn-primary" onclick="checkRandomAnswer()">✓ Răspunde</button>
+            </div>
+
+            <div class="random-operations" id="randomOperations">
+                <div class="op-badge">➕ <span id="addCount">0</span></div>
+                <div class="op-badge">➖ <span id="subCount">0</span></div>
+                <div class="op-badge">✖ <span id="mulCount">0</span></div>
+                <div class="op-badge">➗ <span id="divCount">0</span></div>
+            </div>
+
+            <button class="btn btn-logout" onclick="quitRandom()">🚪 Ieșire</button>
+        </div>
+
+        <!-- ==================== ECRAN MOD PUZZLE ==================== -->
+        <div class="puzzle-screen" id="puzzleScreen">
+            <div class="puzzle-header">
+                <h1>🧩 MOD PUZZLE - DEBLOCHEAZĂ IMAGINEA!</h1>
+                <div class="puzzle-info">
+                    <span id="puzzlePlayer"></span> | Piese deblocate: <span id="puzzlePieces">0/16</span>
+                </div>
+            </div>
+
+            <div class="puzzle-image-container">
+                <div class="puzzle-grid" id="puzzleGrid"></div>
+            </div>
+
+            <div class="puzzle-question-box">
+                <div id="puzzleQuestion" class="puzzle-question"></div>
+                <input type="number" id="puzzleAnswer" class="puzzle-input" placeholder="Răspunde corect">
+                <button class="btn btn-primary" onclick="checkPuzzleAnswer()">✓ Deblochează</button>
+            </div>
+
+            <div class="puzzle-hints">
+                💡 Răspunde corect pentru a debloca piese!
+            </div>
+
+            <button class="btn btn-logout" onclick="quitPuzzle()">🚪 Ieșire</button>
+        </div>
+
+        <!-- ==================== ECRAN MOD DUEL ==================== -->
+        <div class="duel-screen" id="duelScreen">
+            <div class="duel-header">
+                <h1>⚔️ DUEL MATEMATIC - EMA vs RAREȘ!</h1>
+            </div>
+
+            <div class="duel-arena">
+                <div class="duel-player left">
+                    <div class="duel-avatar">👧</div>
+                    <h3>Ema</h3>
+                    <div class="duel-score" id="duelScoreEma">0</div>
+                    <div class="duel-status" id="duelStatusEma">Așteaptă...</div>
+                </div>
+
+                <div class="duel-vs">VS</div>
+
+                <div class="duel-player right">
+                    <div class="duel-avatar">👦</div>
+                    <h3>Rareș</h3>
+                    <div class="duel-score" id="duelScoreRares">0</div>
+                    <div class="duel-status" id="duelStatusRares">Așteaptă...</div>
+                </div>
+            </div>
+
+            <div class="duel-question-box">
+                <div class="duel-round">Runda <span id="duelRound">1</span>/10</div>
+                <div id="duelQuestion" class="duel-question"></div>
+
+                <!-- FAZA 1: Ema introduce răspunsul -->
+                <div class="duel-phase" id="duelPhaseEma" style="display: none;">
+                    <div class="duel-turn-indicator">
+                        <h2>👧 Randul Emei să răspundă!</h2>
+                        <p style="color: #f59e0b; font-weight: bold;">🔒 Rareș, te rog să te uiți în altă parte!</p>
+                    </div>
+                    <div class="duel-single-input">
+                        <input type="password" id="duelAnswerEmaSecure" class="duel-input-secure"
+                               placeholder="Introdu răspunsul..." autocomplete="off">
+                        <button class="btn btn-primary" onclick="submitEmaAnswer()">✓ Confirmă Răspunsul</button>
+                    </div>
+                </div>
+
+                <!-- FAZA 2: Rareș introduce răspunsul -->
+                <div class="duel-phase" id="duelPhaseRares" style="display: none;">
+                    <div class="duel-turn-indicator">
+                        <h2>👦 Randul lui Rareș să răspundă!</h2>
+                        <p style="color: #f59e0b; font-weight: bold;">🔒 Ema, te rog să te uiți în altă parte!</p>
+                    </div>
+                    <div class="duel-single-input">
+                        <input type="password" id="duelAnswerRaresSecure" class="duel-input-secure"
+                               placeholder="Introdu răspunsul..." autocomplete="off">
+                        <button class="btn btn-primary" onclick="submitRaresAnswer()">✓ Confirmă Răspunsul</button>
+                    </div>
+                </div>
+
+                <!-- FAZA 3: Așteptare rezultate -->
+                <div class="duel-phase" id="duelPhaseWait" style="display: none;">
+                    <div class="duel-wait-message">
+                        <div class="loading-spinner"></div>
+                        <h2>⚔️ Se verifică răspunsurile...</h2>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-logout" onclick="quitDuel()">🚪 Ieșire</button>
+        </div>
+
+        <!-- ==================== ECRAN REZULTATE CURSE/MODURI ==================== -->
+        <div class="mode-result-screen" id="modeResultScreen">
+            <div class="mode-result-content">
+                <h1 id="modeResultTitle">🏆 Felicitări!</h1>
+                <div class="mode-result-emoji" id="modeResultEmoji">🎉</div>
+                <div class="mode-result-stats" id="modeResultStats"></div>
+                <div class="mode-result-message" id="modeResultMessage"></div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="retryMode()">🔄 Încercă Din Nou</button>
+                    <button class="btn btn-secondary" onclick="backToSettings()">← Setări</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==================== ADMIN LOGIN ==================== -->
+    <div class="admin-login-screen" id="adminLoginScreen">
+        <div class="admin-login-card">
+            <h1 class="admin-title">🔐 Panou Admin</h1>
+            <p style="color: #666; margin-bottom: 30px;">Introduceti parola de administrator</p>
+            <div class="admin-login-form">
+                <input type="password" id="adminPassword" placeholder="Parolă..."
+                       style="width: 100%; padding: 15px; font-size: 1.1em; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px;">
+                <button class="btn btn-primary" onclick="loginAdmin()" style="width: 100%; margin-bottom: 10px;">
+                    🔓 Autentificare
+                </button>
+                <button class="btn btn-secondary" onclick="closeAdminLogin()" style="width: 100%;">← Înapoi</button>
+                <div id="adminLoginError" style="color: #ef4444; margin-top: 15px; display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ADMIN DASHBOARD ==================== -->
+    <div class="admin-screen" id="adminScreen">
+        <div class="admin-header">
+            <h1>👨‍💼 Panou Administrare - Adrian & Mihaela</h1>
+            <button class="btn btn-logout" onclick="logoutAdmin()">🚪 Ieșire</button>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="admin-tab-btn active" onclick="showAdminTab('overview')">📊 Privire Generală</button>
+            <button class="admin-tab-btn" onclick="showAdminTab('users')">👥 Copiii</button>
+            <button class="admin-tab-btn" onclick="showAdminTab('stats')">📈 Statistici</button>
+            <button class="admin-tab-btn" onclick="showAdminTab('settings')">⚙️ Setări</button>
+            <button class="admin-tab-btn" onclick="showAdminTab('custom')">✏️ Exerciții</button>
+        </div>
+
+        <!-- Tab Overview -->
+        <div class="admin-tab-content active" id="adminTabOverview">
+            <div class="admin-cards-grid">
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon">🎮</div>
+                    <div class="admin-stat-value" id="totalGames">0</div>
+                    <div class="admin-stat-label">Jocuri Jucate</div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon">📝</div>
+                    <div class="admin-stat-value" id="totalTests">0</div>
+                    <div class="admin-stat-label">Teste Complete</div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon">✓</div>
+                    <div class="admin-stat-value" id="totalCorrect">0</div>
+                    <div class="admin-stat-label">Răspunsuri Corecte</div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon">⭐</div>
+                    <div class="admin-stat-value" id="avgScore">0</div>
+                    <div class="admin-stat-label">Scor Mediu</div>
+                </div>
+            </div>
+            <div class="admin-section">
+                <h2>🏆 Ultimele Rezultate</h2>
+                <div id="recentResults"></div>
+            </div>
+        </div>
+
+        <!-- Tab Users -->
+        <div class="admin-tab-content" id="adminTabUsers">
+            <h2>👥 Monitorizare Ema & Rareș</h2>
+            <div class="user-cards">
+                <div class="user-card">
+                    <div class="user-avatar">👧</div>
+                    <h3>Ema</h3>
+                    <div class="user-stats-grid">
+                        <div>Jocuri: <strong id="emaGames">0</strong></div>
+                        <div>Teste: <strong id="emaTests">0</strong></div>
+                        <div>Corecte: <strong id="emaCorrect">0</strong></div>
+                        <div>Best: <strong id="emaBestAdmin">0</strong></div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="viewUserDetails('Ema')">📊 Detalii</button>
+                    <button class="btn btn-logout" onclick="resetUserStats('Ema')">🔄 Reset</button>
+                </div>
+                <div class="user-card">
+                    <div class="user-avatar">👦</div>
+                    <h3>Rareș</h3>
+                    <div class="user-stats-grid">
+                        <div>Jocuri: <strong id="raresGames">0</strong></div>
+                        <div>Teste: <strong id="raresTests">0</strong></div>
+                        <div>Corecte: <strong id="raresCorrect">0</strong></div>
+                        <div>Best: <strong id="raresBestAdmin">0</strong></div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="viewUserDetails('Rareș')">📊 Detalii</button>
+                    <button class="btn btn-logout" onclick="resetUserStats('Rareș')">🔄 Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Stats -->
+        <div class="admin-tab-content" id="adminTabStats">
+            <h2>📈 Statistici Detaliate</h2>
+
+            <!-- Badges Obținute -->
+            <div class="admin-section">
+                <h3>🏅 Badge-uri Obținute</h3>
+                <div id="allBadgesDisplay"></div>
+            </div>
+
+            <!-- Comparație Ema vs Rareș -->
+            <div class="admin-section">
+                <h3>👧 vs 👦 Comparație</h3>
+                <div class="comparison-chart" id="comparisonChart"></div>
+            </div>
+
+            <!-- Calendar Activitate -->
+            <div class="admin-section">
+                <h3>📅 Activitate Săptămânală</h3>
+                <div class="weekly-calendar" id="weeklyCalendar"></div>
+            </div>
+
+            <!-- Progres în Timp -->
+            <div class="admin-section">
+                <h3>📈 Evoluție Scoruri (Ultimele 7 Zile)</h3>
+                <div class="progress-chart">
+                    <div class="progress-bar-chart" id="progressBarChart"></div>
+                </div>
+            </div>
+
+            <!-- Istoric Teste Detaliat -->
+            <div class="admin-section">
+                <h3>📝 Istoric Teste Detaliat</h3>
+                <div id="detailedTestHistory"></div>
+            </div>
+
+            <div class="admin-section">
+                <button class="btn btn-primary" onclick="exportStatistics()" data-tooltip="Exportă toate datele în CSV">
+                    📥 Export Date (CSV)
+                </button>
+                <button class="btn btn-secondary" onclick="exportDetailedReport()" data-tooltip="Raport PDF complet" style="margin-left: 10px;">
+                    📄 Generează Raport Complet
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Settings -->
+        <div class="admin-tab-content" id="adminTabSettings">
+            <h2>⚙️ Setări Sistem</h2>
+            <div class="admin-section">
+                <h3>🔐 Schimbare Parolă</h3>
+                <input type="password" id="newAdminPassword" placeholder="Parolă nouă..."
+                       style="width: 100%; padding: 12px; margin-bottom: 10px; border: 2px solid #ddd; border-radius: 8px;">
+                <button class="btn btn-primary" onclick="changeAdminPassword()">💾 Salvează</button>
+            </div>
+            <div class="admin-section">
+                <h3>🗑️ Acțiuni Periculoase</h3>
+                <button class="btn btn-logout" onclick="clearAllData()">⚠️ Șterge Toate Datele</button>
+            </div>
+        </div>
+
+        <!-- Tab Custom -->
+        <div class="admin-tab-content" id="adminTabCustom">
+            <h2>✏️ Exerciții Personalizate</h2>
+            <div class="admin-section">
+                <h3>➕ Exercițiu Nou</h3>
+                <select id="customOperation">
+                    <option value="add">Adunare</option>
+                    <option value="sub">Scădere</option>
+                    <option value="mul">Înmulțire</option>
+                    <option value="div">Împărțire</option>
+                </select>
+                <div style="margin-top: 15px;">
+                    <input type="number" id="customNum1" placeholder="Număr 1" style="width: 100px; padding: 8px; margin: 0 10px;">
+                    <input type="number" id="customNum2" placeholder="Număr 2" style="width: 100px; padding: 8px;">
+                </div>
+                <button class="btn btn-primary" onclick="addCustomExercise()" style="margin-top: 20px;">➕ Adaugă</button>
+            </div>
+            <div class="admin-section">
+                <h3>📝 Lista Exerciții</h3>
+                <div id="customExercisesList"></div>
+                <button class="btn btn-secondary" onclick="exportCustomExercises()" style="margin-top: 20px;">📥 Export</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buton Admin (ascuns) -->
+    <div style="position: fixed; bottom: 10px; right: 10px; opacity: 0.2; transition: opacity 0.3s;"
+         onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.2'">
+        <button class="btn btn-secondary" onclick="showAdminLogin()" style="font-size: 12px; padding: 8px 15px;">
+            🔐 Admin
+        </button>
+    </div>
+
+    <!-- Mascotă Helper -->
+    <div class="mascot-container" id="mascotContainer">
+        <div class="mascot" id="mascot">
+            <div class="mascot-face">
+                <div class="mascot-eyes">
+                    <div class="eye left"></div>
+                    <div class="eye right"></div>
+                </div>
+                <div class="mascot-mouth"></div>
+            </div>
+        </div>
+        <div class="mascot-speech" id="mascotSpeech" style="display: none;">
+            <p id="mascotText">Bună! Sunt aici să te ajut! 😊</p>
+        </div>
+    </div>
+
+    <!-- Badge Notification -->
+    <div class="badge-notification" id="badgeNotification" style="display: none;">
+        <div class="badge-content">
+            <div class="badge-icon">🏆</div>
+            <div class="badge-title">Badge Nou Deblоcat!</div>
+            <div class="badge-name" id="badgeName"></div>
+            <div class="badge-desc" id="badgeDesc"></div>
+        </div>
+    </div>
+
+    <!-- Daily Reward Modal -->
+    <div class="daily-reward-modal" id="dailyRewardModal" style="display: none;">
+        <div class="daily-reward-content">
+            <h2>🎁 Recompensă Zilnică</h2>
+            <div class="reward-icon">🌟</div>
+            <p class="reward-text">Ai revenit astăzi! +50 puncte bonus!</p>
+            <button class="btn btn-primary" onclick="closeDailyReward()">Super! 🎉</button>
+        </div>
+    </div>
+
+    <!-- Hint Panel -->
+    <div class="hint-panel" id="hintPanel">
+        <div class="hint-header">
+            <span>💡 Ajutor</span>
+            <button class="hint-close" onclick="closeHintPanel()">✕</button>
+        </div>
+        <div class="hint-content" id="hintContent"></div>
+        <div class="hint-footer">
+            <span id="hintsRemaining">Hints rămase: 3</span>
+        </div>
+    </div>
+
+    <!-- Sound Toggle Button -->
+    <div class="sound-toggle" onclick="toggleSound()">
+        <span id="soundIcon">🔊</span>
+    </div>
+
+    <!-- Theme Selector -->
+    <div class="theme-selector" id="themeSelector">
+        <button class="theme-btn active" onclick="setTheme('day')" data-theme="day" title="Modul Zi">☀️</button>
+        <button class="theme-btn" onclick="setTheme('night')" data-theme="night" title="Modul Noapte">🌙</button>
+    </div>
+
+    <!-- Modal Detalii Test -->
+    <div class="test-details-modal" id="testDetailsModal">
+        <div class="test-details-content">
+            <div class="test-details-header">
+                <h2 id="testDetailsTitle">📝 Detalii Test</h2>
+                <button class="close-modal" onclick="closeTestDetails()">✕</button>
+            </div>
+
+            <div class="advanced-stats-grid">
+                <div class="stat-box">
+                    <div class="stat-box-label">Scor Total</div>
+                    <div class="stat-box-value" id="detailScore">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-label">Răspunsuri Corecte</div>
+                    <div class="stat-box-value" id="detailCorrect">0/20</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-label">Procent Succes</div>
+                    <div class="stat-box-value" id="detailPercentage">0%</div>
+                </div>
+            </div>
+
+            <div class="progress-chart">
+                <h3>📊 Distribuție Răspunsuri</h3>
+                <div id="detailChart"></div>
+            </div>
+
+            <h3 style="margin: 30px 0 20px 0;">🔍 Analiza Întrebărilor</h3>
+            <div class="test-questions-review" id="questionsReview"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
