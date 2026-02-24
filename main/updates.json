@@ -1,0 +1,45 @@
+{
+  "updates": [
+    {
+      "version": "1.0.0",
+      "releaseDate": "2024-02-23",
+      "title": "🎉 Lansare Oficială",
+      "type": "major",
+      "changes": [
+        {
+          "category": "✨ Funcționalități Noi",
+          "items": [
+            "Sistem complet de jocuri matematice (Normal, Test Fulger, Cursă, Aleatoriu, Puzzle, Duel)",
+            "Profiluri personalizabile cu avatar-uri și teme de culoare",
+            "Sistem XP avansat cu nivele și recompense zilnice",
+            "Badge-uri și realizări deblokabile",
+            "Grafice de performanță și statistici detaliate",
+            "Calendar de activitate și obiective zilnice",
+            "Mod Duel pentru competiție Ema vs Rareș",
+            "Panou Admin complet pentru părinți"
+          ]
+        },
+        {
+          "category": "🎨 Design & UX",
+          "items": [
+            "Interfață modernă cu animații fluide",
+            "6 teme de culoare personalizabile (Purple, Blue, Green, Pink, Orange, Rainbow)",
+            "Mascotă interactivă pentru ajutor",
+            "Efecte sonore și notificări vizuale",
+            "Design responsive pentru toate ecranele"
+          ]
+        },
+        {
+          "category": "📊 Statistici & Tracking",
+          "items": [
+            "Ranking global cu istoric complet",
+            "Progres per operație matematică",
+            "Grafic evoluție performanță",
+            "Export date CSV și rapoarte detaliate"
+          ]
+        }
+      ],
+      "notes": "Prima versiune stabilă a aplicației cu toate funcționalitățile de bază implementate."
+    }
+  ]
+}
