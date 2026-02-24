@@ -28,9 +28,9 @@
     }
   ],
   "files": {
-    "script.js": "https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/main/script.js",
-    "style.css": "https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/main/style.css",
-    "index.html": "https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/main/index.html"
+    "script.js": "https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/script.js",
+    "style.css": "https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/style.css",
+    "index.html": "https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/index.html"
   },
   "updateUrl": "https://CiofoaiaAndrei.github.io/math-game/"
 }
