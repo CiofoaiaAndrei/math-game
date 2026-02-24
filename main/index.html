@@ -899,6 +899,22 @@
         </div>
     </div>
 
+    <!-- Buton Admin (ascuns) -->
+    <div style="position: fixed; bottom: 10px; right: 10px; opacity: 0.2; transition: opacity 0.3s;"
+         onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.2'">
+        <button class="btn btn-secondary" onclick="showAdminLogin()" style="font-size: 12px; padding: 8px 15px;">
+            🔐 Admin
+        </button>
+    </div>
+
+    <!-- ✅ ADAUGĂ BUTON UPDATE -->
+    <div style="position: fixed; bottom: 10px; left: 10px; opacity: 0.2; transition: opacity 0.3s;"
+         onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.2'">
+        <button class="btn btn-secondary" onclick="manualUpdateCheck()" style="font-size: 12px; padding: 8px 15px;" data-tooltip="Verifică dacă există versiuni noi">
+            🔄 Update
+        </button>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

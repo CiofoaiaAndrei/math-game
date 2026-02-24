@@ -1,6 +1,10 @@
 ﻿// ============================================
 // VARIABILE GLOBALE
 // ============================================
+
+const CURRENT_VERSION = '1.0.0';
+
+
 let currentUser = null;
 let selectedTime = 10;
 let selectedFormat = 'inline';
@@ -4039,3 +4043,289 @@ handleCorrectAnswer = function() {
         saveProfiles();
     }
 };
+
+// ============================================
+// AUTO-UPDATE SYSTEM - VERIFICARE VERSIUNI
+// ============================================
+
+const VERSION_CHECK_URL = 'https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/version.json';
+const UPDATE_CHECK_INTERVAL = 24 * 60 * 60 * 1000; // Verifică o dată pe zi
+
+// Verifică versiunea la pornire
+async function checkForUpdates(showNoUpdateMessage = false) {
+    try {
+        console.log('🔍 Verificare versiuni...');
+        
+        const response = await fetch(VERSION_CHECK_URL + '?t=' + Date.now(), {
+            cache: 'no-cache'
+        });
+        
+        if (!response.ok) {
+            console.warn('⚠️ Nu s-a putut verifica versiunea');
+            return;
+        }
+        
+        const versionData = await response.json();
+        const latestVersion = versionData.version;
+        
+        console.log(`📌 Versiune curentă: ${CURRENT_VERSION}`);
+        console.log(`🆕 Versiune disponibilă: ${latestVersion}`);
+        
+        if (latestVersion !== CURRENT_VERSION) {
+            showUpdateNotification(versionData);
+        } else if (showNoUpdateMessage) {
+            showMascotMessage('✅ Aplicația este la zi!', 2000);
+        }
+        
+        // Salvează timestamp-ul verificării
+        localStorage.setItem('lastUpdateCheck', Date.now().toString());
+        
+    } catch (error) {
+        console.error('❌ Eroare verificare versiuni:', error);
+    }
+}
+
+// Afișează notificare de update
+function showUpdateNotification(versionData) {
+    const modal = document.createElement('div');
+    modal.id = 'updateModal';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        animation: fadeIn 0.3s ease;
+    `;
+    
+    modal.innerHTML = `
+        <div style="
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: slideUp 0.5s ease;
+        ">
+            <div style="font-size: 4em; margin-bottom: 20px;">🎉</div>
+            <h2 style="font-size: 2em; margin-bottom: 15px;">Versiune Nouă Disponibilă!</h2>
+            <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <p style="font-size: 1.2em; margin: 10px 0;">
+                    <strong>Versiune ${versionData.version}</strong>
+                </p>
+                <p style="font-size: 0.9em; opacity: 0.9;">
+                    Lansată: ${new Date(versionData.releaseDate).toLocaleDateString('ro-RO')}
+                </p>
+            </div>
+            <div style="text-align: left; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3 style="margin-bottom: 10px;">📋 Ce este nou:</h3>
+                ${versionData.changes.map(change => `<p style="margin: 8px 0;">• ${change}</p>`).join('')}
+            </div>
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                <button onclick="performUpdate('${versionData.updateUrl}')" style="
+                    flex: 1;
+                    background: white;
+                    color: #667eea;
+                    border: none;
+                    padding: 15px 30px;
+                    border-radius: 10px;
+                    font-size: 1.1em;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: transform 0.2s;
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    🚀 Actualizează Acum
+                </button>
+                <button onclick="dismissUpdate()" style="
+                    flex: 1;
+                    background: rgba(255,255,255,0.2);
+                    color: white;
+                    border: 2px solid white;
+                    padding: 15px 30px;
+                    border-radius: 10px;
+                    font-size: 1.1em;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: transform 0.2s;
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    ⏰ Mai Târziu
+                </button>
+            </div>
+            <p style="font-size: 0.85em; margin-top: 20px; opacity: 0.8;">
+                💡 Actualizarea durează doar câteva secunde și nu pierzi niciun progres!
+            </p>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    playSound('badge');
+}
+
+// Efectuează actualizarea
+function performUpdate(updateUrl) {
+    // Salvează toate datele importante
+    const backupData = {
+        profiles: localStorage.getItem('userProfiles'),
+        ranking: localStorage.getItem('mathRanking'),
+        badges: {
+            'Ema': localStorage.getItem('badges_Ema'),
+            'Rareș': localStorage.getItem('badges_Rareș')
+        },
+        settings: {
+            sound: localStorage.getItem('soundEnabled'),
+            theme: localStorage.getItem('mathGameTheme')
+        }
+    };
+    
+    // Salvează backup-ul
+    localStorage.setItem('updateBackup', JSON.stringify(backupData));
+    localStorage.setItem('updateBackupDate', new Date().toISOString());
+    
+    console.log('💾 Date salvate pentru backup');
+    
+    // Afișează loader
+    const modal = document.getElementById('updateModal');
+    modal.innerHTML = `
+        <div style="
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 60px;
+            border-radius: 20px;
+            text-align: center;
+        ">
+            <div class="loading-spinner" style="
+                border: 5px solid rgba(255,255,255,0.3);
+                border-top: 5px solid white;
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                animation: spin 1s linear infinite;
+                margin: 0 auto 30px;
+            "></div>
+            <h2 style="font-size: 1.8em; margin-bottom: 10px;">🔄 Actualizare în curs...</h2>
+            <p style="opacity: 0.9;">Nu închide aplicația!</p>
+        </div>
+    `;
+    
+    // Redirect către noua versiune după 2 secunde
+    setTimeout(() => {
+        window.location.href = updateUrl;
+    }, 2000);
+}
+
+// Anulează actualizarea
+function dismissUpdate() {
+    const modal = document.getElementById('updateModal');
+    if (modal) {
+        modal.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => modal.remove(), 300);
+    }
+    
+    // Amână verificarea cu 24h
+    localStorage.setItem('updateDismissed', Date.now().toString());
+}
+
+// Restaurează datele după update
+function restoreBackupData() {
+    const backupStr = localStorage.getItem('updateBackup');
+    if (!backupStr) return;
+    
+    try {
+        const backup = JSON.parse(backupStr);
+        
+        console.log('🔄 Restaurare date din backup...');
+        
+        // Restaurează datele
+        if (backup.profiles) localStorage.setItem('userProfiles', backup.profiles);
+        if (backup.ranking) localStorage.setItem('mathRanking', backup.ranking);
+        if (backup.badges) {
+            if (backup.badges.Ema) localStorage.setItem('badges_Ema', backup.badges.Ema);
+            if (backup.badges.Rareș) localStorage.setItem('badges_Rareș', backup.badges.Rareș);
+        }
+        if (backup.settings) {
+            if (backup.settings.sound) localStorage.setItem('soundEnabled', backup.settings.sound);
+            if (backup.settings.theme) localStorage.setItem('mathGameTheme', backup.settings.theme);
+        }
+        
+        console.log('✅ Date restaurate cu succes!');
+        
+        // Șterge backup-ul
+        localStorage.removeItem('updateBackup');
+        
+        // Afișează mesaj de succes
+        setTimeout(() => {
+            showMascotMessage('✅ Aplicația a fost actualizată cu succes! Toate datele au fost păstrate! 🎉', 5000);
+            createEnhancedConfetti();
+        }, 1000);
+        
+    } catch (error) {
+        console.error('❌ Eroare restaurare backup:', error);
+    }
+}
+
+// Verificare automată periodică
+function scheduleUpdateCheck() {
+    const lastCheck = parseInt(localStorage.getItem('lastUpdateCheck') || '0');
+    const now = Date.now();
+    
+    // Verifică dacă au trecut 24h de la ultima verificare
+    if (now - lastCheck > UPDATE_CHECK_INTERVAL) {
+        // Verifică dacă update-ul a fost dismissed recent
+        const dismissed = parseInt(localStorage.getItem('updateDismissed') || '0');
+        
+        if (now - dismissed > UPDATE_CHECK_INTERVAL) {
+            checkForUpdates();
+        }
+    }
+}
+
+// Buton manual de verificare update
+function manualUpdateCheck() {
+    showMascotMessage('🔍 Verificare versiuni...', 2000);
+    checkForUpdates(true);
+}
+
+// Adaugă CSS pentru animații
+const updateStyles = document.createElement('style');
+updateStyles.textContent = `
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+    
+    @keyframes slideUp {
+        from { transform: translateY(50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(updateStyles);
+
+// Inițializare la pornire
+document.addEventListener('DOMContentLoaded', function() {
+    // Verifică dacă există backup de restaurat
+    restoreBackupData();
+    
+    // Verifică versiuni după 3 secunde (să lase aplicația să se încarce)
+    setTimeout(() => {
+        scheduleUpdateCheck();
+    }, 3000);
+});
+
+console.log('🚀 Sistem Auto-Update inițializat! Versiune curentă: ' + CURRENT_VERSION);

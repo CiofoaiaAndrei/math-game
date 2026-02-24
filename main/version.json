@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "releaseDate": "2024-02-24",
+  "changes": [
+    "🎮 Sistem complet de jocuri",
+    "💰 Sistem XP avansat",
+    "🏆 Badge-uri și realizări",
+    "📊 Profiluri personalizabile",
+    "⚔️ Mod Duel Ema vs Rareș"
+  ],
+  "files": {
+    "script.js": "https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/script.js",
+    "style.css": "https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/style.css",
+    "index.html": "https://raw.githubusercontent.com/CiofoaiaAndrei/math-game/main/index.html"
+  },
+  "updateUrl": "https://CiofoaiaAndrei.github.io/math-game/"
+}
